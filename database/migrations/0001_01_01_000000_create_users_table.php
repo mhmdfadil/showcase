@@ -32,6 +32,8 @@ return new class extends Migration
             $table->string('districtsId')->nullable();
             $table->string('villages')->nullable();
             $table->string('villagesId')->nullable();
+            $table->string('status_login')->default(0);
+            $table->timestamp('last_login_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

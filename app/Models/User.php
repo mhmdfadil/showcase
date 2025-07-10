@@ -35,6 +35,8 @@ class User extends Authenticatable
         'districtsId',
         'villages',
         'villagesId',
+        'status_login',  //0 tidak aktif, 1 aktif
+        'last_login_at',
     ];
 
     /**
@@ -56,6 +58,7 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
             'date_of_birth' => 'date',
+            'last_login_at' => 'datetime',
         ];
     }
 

@@ -12,7 +12,7 @@ class Session extends Model
      * @var string
      */
     protected $table = 'sessions';
-
+ 
     /**
      * The primary key for the model.
      *

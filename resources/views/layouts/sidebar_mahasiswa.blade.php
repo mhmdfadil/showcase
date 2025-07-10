@@ -1,58 +1,202 @@
-<div id="sidebar" class="d-flex flex-column bg-dark text-white" style="background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); min-height: 100vh; width: 280px;">
-    <!-- Brand Section with Elegant Design -->
-    <div class="p-3" style="border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
+<div id="sidebar" class="d-flex flex-column" style="background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%); min-height: 100vh; width: 280px; font-family: 'Inter', sans-serif;">
+    <!-- Brand Section with Modern Design -->
+    <div class="p-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <div class="sidebar-brand d-flex align-items-center">
-            <div class="icon-wrapper bg-primary rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" 
-                 style="width: 40px; height: 40px; background: linear-gradient(45deg, #11998e 0%, #38ef7d 100%); box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);">
-                <i class="bi bi-house-door fs-5 text-white"></i>
-            </div>
-            <span class="fs-6 fw-bold" style="letter-spacing: 1px; font-family: 'Poppins', sans-serif; background: linear-gradient(to right, #ffffff, #d1d1d1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">MAHASISWA</span>
-        </div>
-    </div>
-    
-    <!-- User Profile with Glassmorphism Effect -->
-    <div class="px-4 py-2 user-info" style="margin: 1rem; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
-        <div class="d-flex align-items-center">
-            <div class="user-icon me-3">
-                <div class="avatar rounded-circle d-flex align-items-center justify-content-center" 
-                     style="width: 40px; height: 40px; background: linear-gradient(45deg, #11998e 0%, #38ef7d 100%); box-shadow: 0 4px 10px rgba(17, 153, 142, 0.4);">
-                    <i class="bi bi-person-fill text-white fs-5"></i>
-                </div>
+            <div class="icon-wrapper rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" 
+                 style="width: 42px; height: 42px; background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%); box-shadow: 0 4px 20px rgba(67, 97, 238, 0.3);">
+                <i class="bi bi-collection-play fs-5 text-white"></i>
             </div>
             <div>
-                <div class="fw-bold text-white" style="font-size: 0.95rem;">{{ Auth::user()->nama ?? 'Admin' }}</div>
-                <small class="text-muted" style="color: rgba(255, 255, 255, 0.7) !important; font-size: 0.8rem;">{{ Auth::user()->no_hp ?? '+62 123 4567 8910' }}</small>
+                <span class="fs-5 fw-bold text-white" style="letter-spacing: 0.5px; display: block;">SI SHOWCASE</span>
+                <small class="text-muted" style="color: rgba(255, 255, 255, 0.6) !important; font-size: 0.7rem; display: block; margin-top: -2px;">Content Management</small>
             </div>
         </div>
     </div>
     
-    <!-- Navigation Menu with Modern Icons and Hover Effects -->
-    <div class="flex-grow-1 px-3 overflow-auto" style="scrollbar-width: thin;">
+<!-- User Profile with Dynamic Avatar -->
+<div class="px-4 py-3 user-info" style="
+    margin: 1rem; 
+    background: rgba(255, 255, 255, 0.151); 
+    border-radius: 12px; 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+">
+    <div class="d-flex align-items-center">
+        <div class="user-icon me-3">
+            @if(Auth::user()->profile_photo)
+                <img src="{{ asset(Auth::user()->profile_photo) }}" 
+                     class="avatar rounded-circle" 
+                     style="
+                         width: 42px; 
+                         height: 42px; 
+                         object-fit: cover;
+                         border: 2px solid rgba(255, 255, 255, 0.1);
+                         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                     ">
+            @else
+                @php
+                   // Generate initials from name
+                    $name = Auth::user()->name ?? 'Admin';
+                    $words = array_filter(explode(' ', trim($name))); // Split and remove empty parts
+                    $initials = '';
+
+                    if (count($words) === 1) {
+                        // Single word: take first 2 letters (e.g., "John" → "JO")
+                        $initials = strtoupper(substr($words[0], 0, 2));
+                    } elseif (count($words) >= 2) {
+                        // Multiple words: take first letter of first and last word (e.g., "John Doe Smith" → "JS")
+                        $initials = strtoupper(substr($words[0], 0, 1)) . strtoupper(substr(end($words), 0, 1));
+                    }
+
+                    // Color generation based on name hash (same as navbar)
+                    $colors = [
+                        '#4361ee', '#3f37c9', '#4895ef', '#4cc9f0', '#f72585',
+                        '#b5179e', '#7209b7', '#560bad', '#480ca8', '#3a0ca3'
+                    ];
+                    $colorIndex = crc32($name) % count($colors);
+                    $bgColor = $colors[$colorIndex];
+                @endphp
+                
+                <div class="avatar rounded-circle d-flex align-items-center justify-content-center" 
+                     style="
+                         width: 42px; 
+                         height: 42px; 
+                         background: {{ $bgColor }};
+                         color: white;
+                         font-weight: 600;
+                         font-size: 1rem;
+                         border: 2px solid rgba(255, 255, 255, 0.1);
+                         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                     ">
+                    {{ $initials }}
+                </div>
+            @endif
+        </div>
+        <div style="line-height: 1.3;">
+            <div class="fw-semibold text-white" style="font-size: 0.95rem; letter-spacing: 0.3px;">
+                {{ Auth::user()->name ?? 'Admin' }}
+               
+            </div>
+            <div class="d-flex align-items-center mt-1">
+                
+                @if(Auth::user()->roles)
+                    <span class="badge rounded-pill" style="
+                        background: rgba(67, 97, 238, 0.2);
+                        color: #4361ee;
+                        font-size: 0.65rem;
+                        font-weight: 600;
+                        padding: 0.25rem 0.5rem;
+                        border: 1px solid rgba(67, 97, 238, 0.3);
+                    ">
+                        {{ Auth::user()->roles }}
+                    </span>
+                @endif
+                
+            </div>
+             
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Avatar hover effect */
+    .user-info:hover .avatar {
+        transform: scale(1.05);
+        transition: transform 0.3s ease;
+    }
+    
+    /* User info hover effect */
+    .user-info {
+        transition: all 0.3s ease;
+    }
+    
+    .user-info:hover {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+</style>
+    
+    <!-- Navigation Menu -->
+    <div class="flex-grow-1 px-3 overflow-auto" style="scrollbar-width: thin; padding-top: 0.5rem;">
         <ul class="nav flex-column">
+            <!-- Dashboard -->
             <li class="nav-item mb-1">
-                <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3 {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="" 
-                   style="color: rgba(255, 255, 255, 0.85); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+                <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3 {{ request()->routeIs('mahasiswa.dashboard') ? 'active' : '' }}" href="{{ route('mahasiswa.dashboard') }}" 
+                   style="color: rgba(255, 255, 255, 0.85); transition: all 0.25s ease;">
                     <div class="icon-wrapper me-3 d-flex align-items-center justify-content-center" 
-                         style="width: 32px; height: 32px; background: rgba(17, 153, 142, 0.15); border-radius: 8px;">
-                        <i class="bi bi-speedometer2" style="font-size: 1rem; color: #38ef7d;"></i>
+                         style="width: 32px; height: 32px; background: rgba(67, 97, 238, 0.15); border-radius: 8px;">
+                        <i class="bi bi-speedometer2" style="font-size: 1rem; color: #EE6543FF;"></i>
                     </div>
-                    <span style="font-size: 0.95rem;">Dashboard</span>
-                    <div class="active-indicator ms-auto" style="width: 4px; height: 24px; background: #38ef7d; border-radius: 2px; opacity: {{ request()->routeIs('dashboard') ? '1' : '0' }};"></div>
+                    <span style="font-size: 0.925rem; font-weight: 500;">Dashboard</span>
+                    <div class="active-indicator ms-auto" style="width: 4px; height: 24px; background: #EE6543FF; border-radius: 2px; opacity: {{ request()->routeIs('mahasiswa.dashboard') ? '1' : '0' }};"></div>
+                </a>
+            </li>
+
+            <!-- Kategori & Tag -->
+            <li class="nav-item mb-1">
+                <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3 {{ request()->routeIs('mahasiswa.kategori-tag.*') ? 'active' : '' }}" href="{{ route('mahasiswa.kategori-tag.index') }}" 
+                   style="color: rgba(255, 255, 255, 0.85); transition: all 0.25s ease;">
+                    <div class="icon-wrapper me-3 d-flex align-items-center justify-content-center" 
+                         style="width: 32px; height: 32px; background: rgba(255, 171, 0, 0.15); border-radius: 8px;">
+                        <i class="bi bi-tags" style="font-size: 1rem; color: #ffab00;"></i>
+                    </div>
+                    <span style="font-size: 0.925rem; font-weight: 500;">Kategori & Tag</span>
+                    <div class="active-indicator ms-auto" style="width: 4px; height: 24px; background: #ffab00; border-radius: 2px; opacity: {{ request()->routeIs('mahasiswa.kategori-tag.*')  ? '1' : '0' }};"></div>
+                </a>
+            </li>
+
+            <!-- Unggah Karya -->
+            <li class="nav-item mb-1">
+                <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3 {{ request()->routeIs('mahasiswa.karya.create') ? 'active' : '' }}" href="{{ route('mahasiswa.karya.create') }}" 
+                style="color: rgba(255, 255, 255, 0.85); transition: all 0.25s ease;">
+                    <div class="icon-wrapper me-3 d-flex align-items-center justify-content-center" 
+                        style="width: 32px; height: 32px; background: rgba(74, 144, 226, 0.15); border-radius: 8px;">
+                        <i class="bi bi-cloud-upload" style="font-size: 1rem; color: #4FE24AFF;"></i>
+                    </div>
+                    <span style="font-size: 0.925rem; font-weight: 500;">Unggah Karya</span>
+                    <div class="active-indicator ms-auto" style="width: 4px; height: 24px; background: #4FE24AFF; border-radius: 2px; opacity: {{ request()->routeIs('mahasiswa.karya.create') ? '1' : '0' }};"></div>
                 </a>
             </li>
             
+            <!-- Karya Saya -->
+            <li class="nav-item mb-1">
+                <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3 {{ request()->routeIs('mahasiswa.mahasiswa.karya.index') || request()->routeIs('mahasiswa.karya.show') ? 'active' : '' }}" 
+                href="{{ route('mahasiswa.mahasiswa.karya.index') }}" 
+                style="color: rgba(255, 255, 255, 0.85); transition: all 0.25s ease;">
+                    <div class="icon-wrapper me-3 d-flex align-items-center justify-content-center" 
+                        style="width: 32px; height: 32px; background: rgba(58, 134, 255, 0.15); border-radius: 8px;">
+                        <i class="bi bi-folder2-open" style="font-size: 1rem; color: #3A86FF;"></i>
+                    </div>
+                    <span style="font-size: 0.925rem; font-weight: 500;">Karya Saya</span>
+                    <div class="active-indicator ms-auto" 
+                        style="width: 4px; height: 24px; background: #3A86FF; border-radius: 2px; opacity: {{ request()->routeIs('mahasiswa.mahasiswa.karya.index') || request()->routeIs('mahasiswa.karya.show') ? '1' : '0' }};"></div>
+                </a>
+            </li>
+
+            
+            <!-- Semua Karya -->
+            <li class="nav-item mb-1">
+                <a class="nav-link d-flex align-items-center py-2 px-3 rounded-3 {{ request()->routeIs('mahasiswa.akarya.*') ? 'active' : '' }}" href="{{ route('mahasiswa.akarya.publish') }}" 
+                   style="color: rgba(255, 255, 255, 0.85); transition: all 0.25s ease;">
+                    <div class="icon-wrapper me-3 d-flex align-items-center justify-content-center" 
+                         style="width: 32px; height: 32px; background: rgba(72, 199, 142, 0.15); border-radius: 8px;">
+                        <i class="bi bi-collection" style="font-size: 1rem; color: #48c78e;"></i>
+                    </div>
+                    <span style="font-size: 0.925rem; font-weight: 500;">Semua Karya</span>
+                    <div class="active-indicator ms-auto" style="width: 4px; height: 24px; background: #48c78e; border-radius: 2px; opacity: {{ request()->routeIs('mahasiswa.akarya.*') ? '1' : '0' }};"></div>
+                </a>
+            </li>
             
         </ul>
     </div>
     
     <!-- Footer with Logout Button -->
-    <div class="p-3" style="border-top: 1px solid rgba(255, 255, 255, 0.1);">
-        <form method="POST" action="">
+    <div class="p-3" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
+        <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="btn btn-outline-light w-100 d-flex align-items-center justify-content-center py-2" 
-               style="border-radius: 8px; border-color: rgba(255, 255, 255, 0.2); transition: all 0.3s ease;">
-                <i class="bi bi-box-arrow-left me-2"></i> 
-                <span style="font-size: 0.9rem;">Logout</span>
+            <button type="submit" class="btn w-100 d-flex align-items-center justify-content-center py-2" 
+               style="border-radius: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.8); transition: all 0.25s ease;">
+                <i class="bi bi-box-arrow-left me-2" style="color: rgba(255, 255, 255, 0.6);"></i> 
+                <span style="font-size: 0.9rem; font-weight: 500;">Logout</span>
             </button>
         </form>
     </div>
@@ -60,46 +204,51 @@
 
 <!-- Custom CSS for Sidebar -->
 <style>
-    /* Smooth animations and transitions */
-    .icon-wrapper {
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Base styles */
+    #sidebar {
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
     }
     
+    /* Menu item hover and active states */
     .nav-link {
         position: relative;
-        margin-bottom: 2px;
+        margin-bottom: 4px;
     }
     
     .nav-link:hover {
-        background-color: rgba(255, 255, 255, 0.1) !important;
+        background-color: rgba(255, 255, 255, 0.08) !important;
         color: white !important;
     }
     
     .nav-link:hover .icon-wrapper {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: scale(1.05);
     }
     
     .nav-link.active {
         background-color: rgba(255, 255, 255, 0.1) !important;
         color: white !important;
     }
-    
     .nav-link.active .active-indicator {
         opacity: 1 !important;
     }
-    
     .nav-link.active .icon-wrapper {
         background-color: rgba(255, 255, 255, 0.2) !important;
     }
     
-    /* Submenu active state */
-    .nav-link.collapsed .bi-chevron-down {
-        transform: rotate(0deg) !important;
+    /* Icon animations */
+    .icon-wrapper {
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
-    .nav-link:not(.collapsed) .bi-chevron-down {
-        transform: rotate(180deg) !important;
+    /* Active indicator animation */
+    .active-indicator {
+        transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+    
+    .nav-link.active .active-indicator {
+        opacity: 1 !important;
+        transform: scaleY(1.1);
     }
     
     /* Scrollbar styling */
@@ -108,25 +257,27 @@
     }
     
     #sidebar::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.03);
     }
     
     #sidebar::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.15);
         border-radius: 3px;
     }
     
     #sidebar::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.25);
     }
     
-    /* Gradient text for brand */
-    @supports (-webkit-background-clip: text) {
-        .gradient-text {
-            background: linear-gradient(to right, #38ef7d, #11998e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+    /* Logout button hover effect */
+    .btn:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: rgba(255, 255, 255, 0.15) !important;
+        color: white !important;
+    }
+    
+    .btn:hover i {
+        color: white !important;
     }
 </style>
 

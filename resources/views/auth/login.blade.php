@@ -206,16 +206,13 @@
                         <input class="form-check-input" type="checkbox" name="remember" id="remember">
                         <label class="form-check-label" for="remember">Ingat saya</label>
                     </div>
-                    <a href="#" class="forgot-password">Lupa password?</a>
+                    {{-- <a href="#" class="forgot-password">Lupa password?</a> --}}
                 </div>
                 
                 <button type="submit" class="btn btn-login text-white mb-3">
                     <i class="fas fa-sign-in-alt me-2"></i> Masuk
                 </button>
                 
-                <div class="text-center mt-3">
-                    <p class="mb-0">Belum punya akun? <a href="#" class="forgot-password">Daftar sekarang</a></p>
-                </div>
             </form>
         </div>
     </div>
